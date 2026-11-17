@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>壹鸽 TTS · 音色试听平台</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<style>
+:root{--brand:#1DA3DD;--brand-d:#1487bd;--ink:#1f2933;--sub:#6b7280;--line:#e5e8ec;--bg:#f5f6f8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding:20px}
+.wrap{max-width:1280px;margin:0 auto}
+
+header{background:#fff;border-radius:14px;padding:22px 26px;border:1px solid var(--line);margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.logo{height:52px;width:auto;flex-shrink:0}
+.htxt h1{font-size:21px;font-weight:600;letter-spacing:.3px}
+.htxt p{font-size:13px;color:var(--sub);margin-top:3px}
+
+.bill{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:14px}
+.bc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start}
+.bc.free{border-left:3px solid #2e9e5b}
+.bc.paid{border-left:3px solid var(--brand)}
+.bic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.bc.free .bic{background:#e8f6ee;color:#2e9e5b}
+.bc.paid .bic{background:#e8f4fb;color:var(--brand)}
+.bc h3{font-size:14px;font-weight:600;margin-bottom:2px}
+.bc p{font-size:12px;color:var(--sub)}
+.bc .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;margin-top:5px}
+.bc.free .tag{background:#e8f6ee;color:#2e9e5b}
+.bc.paid .tag{background:#e8f4fb;color:var(--brand-d)}
+
+.models{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:14px}
+.md{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:15px 18px;cursor:pointer;transition:.15s}
+.md:hover{border-color:#a8c6de}
+.md.on{border-color:var(--brand);background:#f7fbfe}
+.md .mt{display:flex;justify-content:space-between;align-items:center}
+.md h3{font-size:15px;font-weight:600}
+.md .num{font-size:22px;font-weight:600;color:var(--brand);font-variant-numeric:tabular-nums}
+.md .ds{font-size:12px;color:var(--sub);margin-top:4px;min-height:34px}
+.md .bdg{display:inline-block;margin-top:9px;font-size:10.5px;padding:2px 8px;border-radius:4px}
+.md.on .bdg{background:var(--brand);color:#fff}
+.md:not(.on) .bdg{background:#eef1f4;color:#7b8794}
+
+.panel{background:#fff;border-radius:12px;padding:15px 20px;border:1px solid var(--line);margin-bottom:14px}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:9px}
+.row:last-child{margin-bottom:0}
+.lbl{font-size:12px;color:#9ca3af;min-width:44px}
+.chip{border:1px solid #dde1e6;background:#fff;border-radius:14px;padding:5px 12px;font-size:12.5px;cursor:pointer;transition:.15s;color:#4b5563;white-space:nowrap}
+.chip:hover{border-color:#9db3cc}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.search{flex:1;min-width:210px;border:1px solid #dde1e6;border-radius:8px;padding:7px 12px;font-size:13px;outline:none}
+.search:focus{border-color:var(--brand)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:11px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px 15px;transition:.15s}
+.card:hover{border-color:#b9c8d9}
+.card.on{border-color:var(--brand);box-shadow:0 0 0 2px rgba(29,163,221,.12)}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.nm{font-size:14.5px;font-weight:600}
+.vc{font-size:11px;color:#9ca3af;font-family:ui-monospace,monospace;margin-top:1px}
+.tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.tg{font-size:10.5px;padding:2px 6px;border-radius:4px;white-space:nowrap;background:#f1f3f5;color:#5b6570}
+.tg.f{background:#fbeaf0;color:#a03d63}
+.tg.m{background:#e6f1fb;color:#1d5f9e}
+.tg.d{background:#eef7ee;color:#3d7a3d}
+.ds{font-size:12px;color:var(--sub);margin:7px 0 9px;min-height:32px}
+.pb{width:100%;border:1px solid var(--brand);background:#fff;color:var(--brand);border-radius:6px;padding:6px;font-size:12.5px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.pb:hover{background:#f2f8fc}
+.pb.on{background:var(--brand);color:#fff}
+.tr{width:0;height:0;border-left:6px solid currentColor;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+.tr.sq{width:7px;height:7px;border:none;background:currentColor;border-radius:1px}
+audio{width:100%;margin-top:7px;height:30px}
+.tbox{margin-top:8px;background:#f7f9fb;border:1px solid #e8ecf0;border-radius:6px;padding:8px 10px}
+.tbox .th{font-size:10.5px;color:#9ca3af;margin-bottom:3px;display:flex;justify-content:space-between;align-items:center}
+.tbox .tc{font-size:12px;color:#374151;line-height:1.6}
+.tbox .tc.mut{color:#a8b0b8;font-style:italic}
+.cp{font-size:10.5px;color:var(--brand);cursor:pointer;background:none;border:none;padding:0}
+.cp:hover{text-decoration:underline}
+.cp[disabled]{color:#c3cad2;cursor:default;text-decoration:none}
+.empty{grid-column:1/-1;padding:48px;text-align:center;color:#9ca3af;font-size:13.5px}
+
+footer{background:#fff;border-radius:14px;padding:20px 26px;border:1px solid var(--line);margin-top:14px}
+.fh{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid #eef0f2;margin-bottom:14px}
+.fh img{height:34px}
+.fh .fs{font-size:12.5px;color:var(--sub)}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;font-size:12px;color:var(--sub)}
+.fgrid h4{font-size:13px;color:var(--ink);margin-bottom:6px}
+.fgrid p{margin-bottom:4px}
+.fbot{margin-top:14px;padding-top:12px;border-top:1px solid #eef0f2;font-size:11.5px;color:#9ca3af;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cta{display:inline-block;margin-top:8px;background:var(--brand);color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;text-decoration:none}
+.cta:hover{background:var(--brand-d);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <img class="logo" src="assets/logo.png" alt="壹鸽智能">
+  <div class="htxt">
+    <h1>壹鸽 TTS · 音色试听平台</h1>
+    <p>三套音色模型，共 <b id="m-total">0</b> 款音色可选 · 无需登录，点击即可试听</p>
+  </div>
+</header>
+
+<div class="bill">
+  <div class="bc free">
+    <div class="bic">✓</div>
+    <div>
+      <h3>已开通模型 · 不额外收费</h3>
+      <p>当前方案已在用的音色库，可直接选用，无需追加采购。</p>
+      <span class="tag">当前方案在用</span>
+    </div>
+  </div>
+  <div class="bc paid">
+    <div class="bic">i</div>
+    <div>
+      <h3>可增配模型 · 需额外收费</h3>
+      <p>用于扩展音色选择范围，具体资费与开通方式请联系商务沟通。</p>
+      <span class="tag">资费请联系商务</span>
+    </div>
+  </div>
+</div>
+
+<div class="models" id="models"></div>
+
+<div class="panel">
+  <div class="row">
+    <span class="lbl">性别</span>
+    <button class="chip on" data-k="g" data-v="all">全部</button>
+    <button class="chip" data-k="g" data-v="女">女声</button>
+    <button class="chip" data-k="g" data-v="男">男声</button>
+  </div>
+  <div class="row">
+    <span class="lbl">类型</span>
+    <span id="types"></span>
+  </div>
+  <div class="row">
+    <span class="lbl">搜索</span>
+    <input class="search" id="q" placeholder="输入音色名称，如 月华 / 芊悦 / 阿珍">
+    <button class="chip" id="reset">重置筛选</button>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>
+  <div class="fh">
+    <img src="assets/logo.png" alt="壹鸽智能">
+    <div class="fs">壹鸽智能 · EGOSAI<br>智能语音解决方案</div>
+    <a class="cta" href="mailto:ganyuning@egosai.com">咨询音色开通与资费</a>
+  </div>
+  <div class="fgrid">
+    <div>
+      <h4>关于本平台</h4>
+      <p>收录壹鸽 TTS 三套音色模型，共 <span class="ftotal">216</span> 款音色。</p>
+      <p>所有音频均可离线试听，点击播放即可，同一时间只播放一个。</p>
+    </div>
+    <div>
+      <h4>选型建议</h4>
+      <p>建议优先从「已开通模型」中挑选，无额外成本。</p>
+      <p>需要特定音色风格时，再评估「可增配模型」。</p>
+    </div>
+    <div>
+      <h4>试听说明</h4>
+      <p>每款音色下方展示其音频对应的文本内容。</p>
+      <p>音色音频为演示样音，实际业务效果以正式合成为准。</p>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 壹鸽智能 EGOSAI</span>
+    <span>如需定制音色或批量合成，请联系商务</span>
+  </div>
+</footer>
+
+</div>
+
+<script>
+const V = [{"v":"zhitian","n":"知甜","m":"std","c":"超高清","l":"","g":"女","d":"甜美女声","a":"audio/std_zhitian.mp3","x":"官方演示样音"},{"v":"zhiqing","n":"知青","m":"std","c":"超高清","l":"台湾话","g":"女","d":"中国台湾话女声","a":"audio/std_zhiqing.mp3","x":"官方演示样音"},{"v":"zhichu","n":"知厨","m":"std","c":"超高清","l":"","g":"男","d":"舌尖男声","a":"audio/std_zhichu.mp3","x":"官方演示样音"},{"v":"zhide","n":"知德","m":"std","c":"超高清","l":"","g":"男","d":"新闻男声","a":"audio/std_zhide.mp3","x":"官方演示样音"},{"v":"zhifei","n":"知飞","m":"std","c":"超高清","l":"","g":"","d":"激昂解说","a":"audio/std_zhifei.mp3","x":"官方演示样音"},{"v":"zhijia","n":"知佳","m":"std","c":"超高清","l":"","g":"女","d":"标准女声","a":"audio/std_zhijia.mp3","x":"官方演示样音"},{"v":"zhilun","n":"知伦","m":"std","c":"超高清","l":"","g":"","d":"悬疑解说","a":"audio/std_zhilun.mp3","x":"官方演示样音"},{"v":"zhinan","n":"知楠","m":"std","c":"超高清","l":"","g":"男","d":"广告男声","a":"audio/std_zhinan.mp3","x":"官方演示样音"},{"v":"zhiqi","n":"知琪","m":"std","c":"超高清","l":"","g":"女","d":"温柔女声","a":"audio/std_zhiqi.mp3","x":"官方演示样音"},{"v":"zhiqian","n":"知倩","m":"std","c":"超高清","l":"","g":"女","d":"资讯女声","a":"audio/std_zhiqian.mp3","x":"官方演示样音"},{"v":"zhiru","n":"知茹","m":"std","c":"超高清","l":"","g":"女","d":"新闻女声","a":"audio/std_zhiru.mp3","x":"官方演示样音"},{"v":"zhiwei","n":"知薇","m":"std","c":"超高清","l":"","g":"女","d":"萝莉女声","a":"audio/std_zhiwei.mp3","x":"官方演示样音"},{"v":"zhixiang","n":"知祥","m":"std","c":"超高清","l":"","g":"男","d":"磁性男声","a":"audio/std_zhixiang.mp3","x":"官方演示样音"},{"v":"abin","n":"阿斌","m":"std","c":"数字人","l":"普通话","g":"","d":"广东普通话","a":"audio/std_abin.mp3","x":"官方演示样音"},{"v":"zhixiaobai","n":"知小白","m":"std","c":"数字人","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhixiaobai.mp3","x":"官方演示样音"},{"v":"zhixiaoxia","n":"知小夏","m":"std","c":"数字人","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhixiaoxia.mp3","x":"官方演示样音"},{"v":"zhiya","n":"知雅","m":"std","c":"客服","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhiya.mp3","x":"官方演示样音"},{"v":"aixia","n":"艾夏","m":"std","c":"客服","l":"","g":"女","d":"亲和女声","a":"audio/std_aixia.mp3","x":"官方演示样音"},{"v":"aiyue","n":"艾悦","m":"std","c":"客服","l":"","g":"女","d":"温柔女声","a":"audio/std_aiyue.mp3","x":"官方演示样音"},{"v":"aiya","n":"艾雅","m":"std","c":"客服","l":"","g":"女","d":"严厉女声","a":"audio/std_aiya.mp3","x":"官方演示样音"},{"v":"aijing","n":"艾婧","m":"std","c":"客服","l":"","g":"女","d":"严厉女声","a":"audio/std_aijing.mp3","x":"官方演示样音"},{"v":"aimei","n":"艾美","m":"std","c":"客服","l":"","g":"女","d":"甜美女声","a":"audio/std_aimei.mp3","x":"官方演示样音"},{"v":"siyue","n":"思悦","m":"std","c":"客服","l":"","g":"女","d":"温柔女声","a":"audio/std_siyue.mp3","x":"官方演示样音"},{"v":"aina","n":"艾娜","m":"std","c":"客服","l":"","g":"女","d":"浙普女声","a":"audio/std_aina.mp3","x":"官方演示样音"},{"v":"aishuo","n":"艾硕","m":"std","c":"客服","l":"","g":"男","d":"自然男声","a":"audio/std_aishuo.mp3","x":"官方演示样音"},{"v":"aiyu","n":"艾雨","m":"std","c":"客服","l":"","g":"女","d":"自然女声","a":"audio/std_aiyu.mp3","x":"官方演示样音"},{"v":"xiaomei","n":"小美","m":"std","c":"客服","l":"","g":"女","d":"甜美女声","a":"audio/std_xiaomei.mp3","x":"官方演示样音"},{"v":"yina","n":"伊娜","m":"std","c":"客服","l":"","g":"女","d":"浙普女声","a":"audio/std_yina.mp3","x":"官方演示样音"},{"v":"sijing","n":"思婧","m":"std","c":"客服","l":"","g":"女","d":"严厉女声","a":"audio/std_sijing.mp3","x":"官方演示样音"},{"v":"zhiyuan","n":"知媛","m":"std","c":"通用","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhiyuan.mp3","x":"官方演示样音"},{"v":"zhiyue","n":"知悦","m":"std","c":"通用","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhiyue.mp3","x":"官方演示样音"},{"v":"zhistella","n":"知莎","m":"std","c":"通用","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhistella.mp3","x":"官方演示样音"},{"v":"zhigui","n":"知柜","m":"std","c":"通用","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhigui.mp3","x":"官方演示样音"},{"v":"zhishuo","n":"知硕","m":"std","c":"通用","l":"普通话","g":"男","d":"普通话男声","a":"audio/std_zhishuo.mp3","x":"官方演示样音"},{"v":"zhida","n":"知达","m":"std","c":"通用","l":"普通话","g":"男","d":"普通话男声","a":"audio/std_zhida.mp3","x":"官方演示样音"},{"v":"aiqi","n":"艾琪","m":"std","c":"通用","l":"","g":"女","d":"温柔女声","a":"audio/std_aiqi.mp3","x":"官方演示样音"},{"v":"aicheng","n":"艾诚","m":"std","c":"通用","l":"","g":"男","d":"标准男声","a":"audio/std_aicheng.mp3","x":"官方演示样音"},{"v":"aijia","n":"艾佳","m":"std","c":"通用","l":"","g":"女","d":"标准女声","a":"audio/std_aijia.mp3","x":"官方演示样音"},{"v":"siqi","n":"思琪","m":"std","c":"通用","l":"","g":"女","d":"温柔女声","a":"audio/std_siqi.mp3","x":"官方演示样音"},{"v":"sijia","n":"思佳","m":"std","c":"通用","l":"","g":"女","d":"标准女声","a":"audio/std_sijia.mp3","x":"官方演示样音"},{"v":"mashu","n":"马树","m":"std","c":"通用","l":"","g":"男","d":"儿童剧男声","a":"audio/std_mashu.mp3","x":"官方演示样音"},{"v":"yuer","n":"悦儿","m":"std","c":"通用","l":"","g":"女","d":"儿童剧女声","a":"audio/std_yuer.mp3","x":"官方演示样音"},{"v":"ruoxi","n":"若兮","m":"std","c":"通用","l":"","g":"女","d":"温柔女声","a":"audio/std_ruoxi.mp3","x":"官方演示样音"},{"v":"aida","n":"艾达","m":"std","c":"通用","l":"","g":"男","d":"标准男声","a":"audio/std_aida.mp3","x":"官方演示样音"},{"v":"sicheng","n":"思诚","m":"std","c":"通用","l":"","g":"男","d":"标准男声","a":"audio/std_sicheng.mp3","x":"官方演示样音"},{"v":"ninger","n":"宁儿","m":"std","c":"通用","l":"","g":"女","d":"标准女声","a":"audio/std_ninger.mp3","x":"官方演示样音"},{"v":"xiaoyun","n":"小云","m":"std","c":"通用","l":"","g":"女","d":"标准女声","a":"audio/std_xiaoyun.mp3","x":"官方演示样音"},{"v":"xiaogang","n":"小刚","m":"std","c":"通用","l":"","g":"男","d":"标准男声","a":"audio/std_xiaogang.mp3","x":"官方演示样音"},{"v":"ruilin","n":"瑞琳","m":"std","c":"通用","l":"","g":"女","d":"标准女声","a":"audio/std_ruilin.mp3","x":"官方演示样音"},{"v":"zhimao","n":"知猫","m":"std","c":"直播","l":"普通话","g":"女","d":"普通话女声","a":"audio/std_zhimao.mp3","x":"官方演示样音"},{"v":"laomei","n":"老妹","m":"std","c":"直播","l":"","g":"女","d":"吆喝女声","a":"audio/std_laomei.mp3","x":"官方演示样音"},{"v":"laotie","n":"老铁","m":"std","c":"直播","l":"","g":"","d":"东北老铁","a":"audio/std_laotie.mp3","x":"官方演示样音"},{"v":"xiaoxian","n":"小仙","m":"std","c":"直播","l":"","g":"女","d":"亲切女声","a":"audio/std_xiaoxian.mp3","x":"官方演示样音"},{"v":"guijie","n":"柜姐","m":"std","c":"直播","l":"","g":"女","d":"亲切女声","a":"audio/std_guijie.mp3","x":"官方演示样音"},{"v":"stella","n":"Stella","m":"std","c":"直播","l":"","g":"女","d":"知性女声","a":"audio/std_stella.mp3","x":"官方演示样音"},{"v":"maoxiaomei","n":"猫小美","m":"std","c":"直播","l":"","g":"女","d":"活力女声","a":"audio/std_maoxiaomei.mp3","x":"官方演示样音"},{"v":"qiaowei","n":"巧薇","m":"std","c":"直播","l":"","g":"","d":"卖场主播","a":"audio/std_qiaowei.mp3","x":"官方演示样音"},{"v":"ailun","n":"艾伦","m":"std","c":"直播","l":"","g":"","d":"悬疑解说","a":"audio/std_ailun.mp3","x":"官方演示样音"},{"v":"aifei","n":"艾飞","m":"std","c":"直播","l":"","g":"","d":"激昂解说","a":"audio/std_aifei.mp3","x":"官方演示样音"},{"v":"yaqun","n":"亚群","m":"std","c":"直播","l":"","g":"","d":"卖场广播","a":"audio/std_yaqun.mp3","x":"官方演示样音"},{"v":"stanley","n":"Stanley","m":"std","c":"直播","l":"","g":"男","d":"沉稳男声","a":"audio/std_stanley.mp3","x":"官方演示样音"},{"v":"kenny","n":"Kenny","m":"std","c":"直播","l":"","g":"男","d":"温暖男声","a":"audio/std_kenny.mp3","x":"官方演示样音"},{"v":"rosa","n":"Rosa","m":"std","c":"直播","l":"","g":"女","d":"自然女声","a":"audio/std_rosa.mp3","x":"官方演示样音"},{"v":"aitong","n":"艾彤","m":"std","c":"童声","l":"","g":"","d":"儿童音","a":"audio/std_aitong.mp3","x":"官方演示样音"},{"v":"aiwei","n":"艾薇","m":"std","c":"童声","l":"","g":"女","d":"萝莉女声","a":"audio/std_aiwei.mp3","x":"官方演示样音"},{"v":"jielidou","n":"杰力豆","m":"std","c":"童声","l":"","g":"","d":"治愈童声","a":"audio/std_jielidou.mp3","x":"官方演示样音"},{"v":"xiaobei","n":"小北","m":"std","c":"童声","l":"","g":"女","d":"萝莉女声","a":"audio/std_xiaobei.mp3","x":"官方演示样音"},{"v":"sitong","n":"思彤","m":"std","c":"童声","l":"","g":"","d":"儿童音","a":"audio/std_sitong.mp3","x":"官方演示样音"},{"v":"aibao","n":"艾宝","m":"std","c":"童声","l":"","g":"女","d":"萝莉女声","a":"audio/std_aibao.mp3","x":"官方演示样音"},{"v":"perla","n":"Perla","m":"std","c":"多语种","l":"","g":"女","d":"意大利语女声","a":"audio/std_perla.mp3","x":"官方演示样音"},{"v":"camila","n":"Camila","m":"std","c":"多语种","l":"","g":"女","d":"西班牙语女声","a":"audio/std_camila.mp3","x":"官方演示样音"},{"v":"masha","n":"masha","m":"std","c":"多语种","l":"","g":"女","d":"俄语女声","a":"audio/std_masha.mp3","x":"官方演示样音"},{"v":"kyong","n":"Kyong","m":"std","c":"多语种","l":"","g":"女","d":"韩语女声","a":"audio/std_kyong.mp3","x":"官方演示样音"},{"v":"tien","n":"Tien","m":"std","c":"多语种","l":"","g":"女","d":"越南语女声","a":"audio/std_tien.mp3","x":"官方演示样音"},{"v":"tomoka","n":"智香","m":"std","c":"多语种","l":"","g":"女","d":"日语女声","a":"audio/std_tomoka.mp3","x":"官方演示样音"},{"v":"tomoya","n":"智也","m":"std","c":"多语种","l":"","g":"男","d":"日语男声","a":"audio/std_tomoya.mp3","x":"官方演示样音"},{"v":"indah","n":"Indah","m":"std","c":"多语种","l":"","g":"女","d":"印尼女声","a":"audio/std_indah.mp3","x":"官方演示样音"},{"v":"farah","n":"Farah","m":"std","c":"多语种","l":"","g":"女","d":"马来语女声","a":"audio/std_farah.mp3","x":"官方演示样音"},{"v":"tala","n":"Tala","m":"std","c":"多语种","l":"","g":"女","d":"菲律宾语女声","a":"audio/std_tala.mp3","x":"官方演示样音"},{"v":"ava","n":"ava","m":"std","c":"英文","l":"","g":"女","d":"美式女声","a":"audio/std_ava.mp3","x":"官方演示样音"},{"v":"luca","n":"Luca","m":"std","c":"英文","l":"","g":"男","d":"英音男声","a":"audio/std_luca.mp3","x":"官方演示样音"},{"v":"luna","n":"Luna","m":"std","c":"英文","l":"","g":"女","d":"英音女声","a":"audio/std_luna.mp3","x":"官方演示样音"},{"v":"emily","n":"Emily","m":"std","c":"英文","l":"","g":"女","d":"英音女声","a":"audio/std_emily.mp3","x":"官方演示样音"},{"v":"eric","n":"Eric","m":"std","c":"英文","l":"","g":"男","d":"英音男声","a":"audio/std_eric.mp3","x":"官方演示样音"},{"v":"annie","n":"Annie","m":"std","c":"英文","l":"","g":"女","d":"美语女声","a":"audio/std_annie.mp3","x":"官方演示样音"},{"v":"andy","n":"Andy","m":"std","c":"英文","l":"","g":"男","d":"美音男声","a":"audio/std_andy.mp3","x":"官方演示样音"},{"v":"abby","n":"Abby","m":"std","c":"英文","l":"","g":"女","d":"美音女声","a":"audio/std_abby.mp3","x":"官方演示样音"},{"v":"lydia","n":"Lydia","m":"std","c":"英文","l":"","g":"","d":"英中双语","a":"audio/std_lydia.mp3","x":"官方演示样音"},{"v":"olivia","n":"Olivia","m":"std","c":"英文","l":"","g":"女","d":"英音女生","a":"audio/std_olivia.mp3","x":"官方演示样音"},{"v":"wendy","n":"Wendy","m":"std","c":"英文","l":"","g":"女","d":"英音女声","a":"audio/std_wendy.mp3","x":"官方演示样音"},{"v":"harry","n":"Harry","m":"std","c":"英文","l":"","g":"男","d":"英音男声","a":"audio/std_harry.mp3","x":"官方演示样音"},{"v":"cuijie","n":"翠姐","m":"std","c":"方言","l":"东北话","g":"女","d":"东北话女声","a":"audio/std_cuijie.mp3","x":"官方演示样音"},{"v":"kelly","n":"Kelly","m":"std","c":"方言","l":"粤语","g":"女","d":"中国香港粤语女声","a":"audio/std_kelly.mp3","x":"官方演示样音"},{"v":"jiajia","n":"佳佳","m":"std","c":"方言","l":"粤语","g":"女","d":"粤语女声","a":"audio/std_jiajia.mp3","x":"官方演示样音"},{"v":"dahu","n":"大虎","m":"std","c":"方言","l":"东北话","g":"男","d":"东北话男声","a":"audio/std_dahu.mp3","x":"官方演示样音"},{"v":"aikan","n":"艾侃","m":"std","c":"方言","l":"天津话","g":"男","d":"天津话男声","a":"audio/std_aikan.mp3","x":"官方演示样音"},{"v":"taozi","n":"桃子","m":"std","c":"方言","l":"粤语","g":"女","d":"粤语女声","a":"audio/std_taozi.mp3","x":"官方演示样音"},{"v":"qingqing","n":"青青","m":"std","c":"方言","l":"台湾话","g":"女","d":"中国台湾话女声","a":"audio/std_qingqing.mp3","x":"官方演示样音"},{"v":"xiaoze","n":"小泽","m":"std","c":"方言","l":"湖南","g":"","d":"湖南重口音","a":"audio/std_xiaoze.mp3","x":"官方演示样音"},{"v":"shanshan","n":"姗姗","m":"std","c":"方言","l":"粤语","g":"女","d":"粤语女声","a":"audio/std_shanshan.mp3","x":"官方演示样音"},{"v":"chuangirl","n":"小玥","m":"std","c":"方言","l":"四川话","g":"女","d":"四川话女声","a":"audio/std_chuangirl.mp3","x":"官方演示样音"},{"v":"tc402000","n":"云晓芙","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"聊天女声 · 超自然2.0","a":"audio/adv_tc_402000.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc402001","n":"云小团","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"温柔甜美女声 · 超自然2.0","a":"audio/adv_tc_402001.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc402002","n":"云大围","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"磁性男声 · 超自然2.0","a":"audio/adv_tc_402002.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403009","n":"云嘉尔","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"慵懒男声 · 超自然2.0","a":"audio/adv_tc_403009.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403010","n":"云嘉和","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"温和男声 · 超自然2.0","a":"audio/adv_tc_403010.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403011","n":"云嘉瑜","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"情感解说女声 · 超自然2.0","a":"audio/adv_tc_403011.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403012","n":"云嘉辉","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"激情解说男声 · 超自然2.0","a":"audio/adv_tc_403012.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403013","n":"云小璇","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"活力女青年 · 超自然2.0","a":"audio/adv_tc_403013.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403014","n":"云佳洁","m":"adv","c":"超自然2.0","l":"中文","g":"","d":"轻熟姐姐 · 超自然2.0","a":"audio/adv_tc_403014.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc404000","n":"云佳妍（广）","m":"adv","c":"超自然2.0","l":"粤语","g":"女","d":"广粤亲和女声 · 超自然2.0","a":"audio/adv_tc_404000.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403000","n":"云小朵","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"特色女童声 · 超自然2.0","a":"audio/adv_tc_403000.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403001","n":"云小和","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"聊天女声 · 超自然2.0","a":"audio/adv_tc_403001.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403002","n":"云小帅","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"解说男声 · 超自然2.0","a":"audio/adv_tc_403002.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403003","n":"云小天","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"青春校园男声 · 超自然2.0","a":"audio/adv_tc_403003.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403004","n":"云大川","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"活力男老师 · 超自然2.0","a":"audio/adv_tc_403004.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403005","n":"云雅琴","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"沉稳女老师 · 超自然2.0","a":"audio/adv_tc_403005.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403006","n":"YunMia","m":"adv","c":"超自然2.0","l":"中文","g":"女","d":"美音女助手 · 超自然2.0","a":"audio/adv_tc_403006.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403007","n":"YunLeo","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"美音男助手 · 超自然2.0","a":"audio/adv_tc_403007.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc403008","n":"云小洋","m":"adv","c":"超自然2.0","l":"中文","g":"男","d":"机灵男童 · 超自然2.0","a":"audio/adv_tc_403008.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc502007","n":"智小虎","m":"adv","c":"超自然1.0","l":"中文","g":"","d":"聊天童声 · 超自然1.0","a":"audio/adv_tc_502007.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc502006","n":"智小悟","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"聊天男声 · 超自然1.0","a":"audio/adv_tc_502006.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc502005","n":"智小解","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"解说男声 · 超自然1.0","a":"audio/adv_tc_502005.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc502004","n":"智小满","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"营销女声 · 超自然1.0","a":"audio/adv_tc_502004.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc502003","n":"智小敏","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"聊天女声 · 超自然1.0","a":"audio/adv_tc_502003.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc502001","n":"智小柔","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"聊天女声 · 超自然1.0","a":"audio/adv_tc_502001.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc602004","n":"暖心阿灿","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"聊天男声 · 超自然1.0","a":"audio/adv_tc_602004.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc602005","n":"专业梓欣","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"聊天女声 · 超自然1.0","a":"audio/adv_tc_602005.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603000","n":"懂事少年","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"特色男声 · 超自然1.0","a":"audio/adv_tc_603000.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603001","n":"潇湘妹妹","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"特色女声 · 超自然1.0","a":"audio/adv_tc_603001.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603002","n":"软萌心心","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"特色男童声 · 超自然1.0","a":"audio/adv_tc_603002.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603003","n":"随和老李","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"聊天男声 · 超自然1.0","a":"audio/adv_tc_603003.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603004","n":"温柔小柠","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"聊天女声 · 超自然1.0","a":"audio/adv_tc_603004.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603005","n":"知心大林","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"聊天男声 · 超自然1.0","a":"audio/adv_tc_603005.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603006","n":"沉稳青叔","m":"adv","c":"超自然1.0","l":"中文","g":"男","d":"聊天男声 · 超自然1.0","a":"audio/adv_tc_603006.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc603007","n":"邻家女孩","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"聊天女声 · 超自然1.0","a":"audio/adv_tc_603007.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc602003","n":"爱小悠","m":"adv","c":"超自然1.0","l":"中文","g":"女","d":"聊天女声 · 超自然1.0","a":"audio/adv_tc_602003.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501000","n":"智斌","m":"adv","c":"大模型","l":"中文","g":"男","d":"阅读男声 · 大模型","a":"audio/adv_tc_501000.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501001","n":"智兰","m":"adv","c":"大模型","l":"中文","g":"女","d":"资讯女声 · 大模型","a":"audio/adv_tc_501001.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501002","n":"智菊","m":"adv","c":"大模型","l":"中文","g":"女","d":"阅读女声 · 大模型","a":"audio/adv_tc_501002.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501003","n":"智宇","m":"adv","c":"大模型","l":"中文","g":"男","d":"阅读男声 · 大模型","a":"audio/adv_tc_501003.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501004","n":"月华","m":"adv","c":"大模型","l":"中文","g":"女","d":"聊天女声 · 大模型","a":"audio/adv_tc_501004.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501005","n":"飞镜","m":"adv","c":"大模型","l":"中文","g":"男","d":"聊天男声 · 大模型","a":"audio/adv_tc_501005.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501006","n":"千嶂","m":"adv","c":"大模型","l":"中文","g":"男","d":"聊天男声 · 大模型","a":"audio/adv_tc_501006.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501007","n":"浅草","m":"adv","c":"大模型","l":"中文","g":"男","d":"聊天男声 · 大模型","a":"audio/adv_tc_501007.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501008","n":"WeJames","m":"adv","c":"大模型","l":"英文","g":"男","d":"外语男声 · 大模型","a":"audio/adv_tc_501008.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc501009","n":"WeWinny","m":"adv","c":"大模型","l":"英文","g":"女","d":"外语女声 · 大模型","a":"audio/adv_tc_501009.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc601008","n":"爱小豪","m":"adv","c":"大模型","l":"中文","g":"男","d":"聊天男声 · 大模型","a":"audio/adv_tc_601008.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc601009","n":"爱小芊","m":"adv","c":"大模型","l":"中文","g":"女","d":"聊天女声 · 大模型","a":"audio/adv_tc_601009.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc601010","n":"爱小娇","m":"adv","c":"大模型","l":"中文","g":"女","d":"聊天女声 · 大模型","a":"audio/adv_tc_601010.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc601011","n":"爱小川","m":"adv","c":"大模型","l":"中文","g":"男","d":"聊天男声 · 大模型","a":"audio/adv_tc_601011.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc601012","n":"爱小璟","m":"adv","c":"大模型","l":"中文","g":"女","d":"特色女声 · 大模型","a":"audio/adv_tc_601012.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc601013","n":"爱小伊","m":"adv","c":"大模型","l":"中文","g":"女","d":"阅读女声 · 大模型","a":"audio/adv_tc_601013.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc601014","n":"爱小简","m":"adv","c":"大模型","l":"中文","g":"男","d":"聊天男声 · 大模型","a":"audio/adv_tc_601014.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101050","n":"WeJack","m":"adv","c":"精品","l":"英文","g":"男","d":"英文男声 · 精品","a":"audio/adv_tc_101050.mp3","x":"Hello, welcome to our text to speech service. This sample demonstrates the voice quality and rhythm."},{"v":"tc101055","n":"智付","m":"adv","c":"精品","l":"中文","g":"女","d":"通用女声 · 精品","a":"audio/adv_tc_101055.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101013","n":"智辉","m":"adv","c":"精品","l":"中文","g":"男","d":"新闻男声 · 精品","a":"audio/adv_tc_101013.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101019","n":"智彤","m":"adv","c":"精品","l":"中文","g":"女","d":"粤语女声 · 精品","a":"audio/adv_tc_101019.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101030","n":"智柯","m":"adv","c":"精品","l":"中文","g":"男","d":"通用男声 · 精品","a":"audio/adv_tc_101030.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101054","n":"智友","m":"adv","c":"精品","l":"中文","g":"男","d":"通用男声 · 精品","a":"audio/adv_tc_101054.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101027","n":"智梅","m":"adv","c":"精品","l":"中文","g":"女","d":"通用女声 · 精品","a":"audio/adv_tc_101027.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101026","n":"智希","m":"adv","c":"精品","l":"中文","g":"女","d":"通用女声 · 精品","a":"audio/adv_tc_101026.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101004","n":"智云","m":"adv","c":"精品","l":"中文","g":"男","d":"通用男声 · 精品","a":"audio/adv_tc_101004.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101015","n":"智萌","m":"adv","c":"精品","l":"中文","g":"男","d":"男童声 · 精品","a":"audio/adv_tc_101015.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101011","n":"智燕","m":"adv","c":"精品","l":"中文","g":"女","d":"新闻女声 · 精品","a":"audio/adv_tc_101011.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101001","n":"智瑜","m":"adv","c":"精品","l":"中文","g":"女","d":"情感女声 · 精品","a":"audio/adv_tc_101001.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101021","n":"智瑞","m":"adv","c":"精品","l":"中文","g":"男","d":"新闻男声 · 精品","a":"audio/adv_tc_101021.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"tc101016","n":"智甜","m":"adv","c":"精品","l":"中文","g":"女","d":"女童声 · 精品","a":"audio/adv_tc_101016.mp3","x":"您好，欢迎体验智能语音合成服务。以下示例用于展示音色效果，您可以对比不同音色的语气与节奏。"},{"v":"Cherry","n":"芊悦","m":"top","c":"通用","l":"普通话","g":"女","d":"阳光积极、亲切自然小姐姐（女性）","a":"audio/top_Cherry.mp3","x":"官方演示样音"},{"v":"Serena","n":"苏瑶","m":"top","c":"通用","l":"普通话","g":"女","d":"温柔小姐姐（女性）","a":"audio/top_Serena.mp3","x":"官方演示样音"},{"v":"Ethan","n":"晨煦","m":"top","c":"通用","l":"普通话","g":"男","d":"标准普通话，带部分北方口音。阳光、温暖、活力、朝气（男性）","a":"audio/top_Ethan.mp3","x":"官方演示样音"},{"v":"Chelsie","n":"千雪","m":"top","c":"通用","l":"普通话","g":"女","d":"二次元虚拟女友（女性）","a":"audio/top_Chelsie.mp3","x":"官方演示样音"},{"v":"Momo","n":"茉兔","m":"top","c":"通用","l":"普通话","g":"女","d":"撒娇搞怪，逗你开心（女性）","a":"audio/top_Momo.mp3","x":"官方演示样音"},{"v":"Vivian","n":"十三","m":"top","c":"通用","l":"普通话","g":"女","d":"拽拽的、可爱的小暴躁（女性）","a":"audio/top_Vivian.mp3","x":"官方演示样音"},{"v":"Moon","n":"月白","m":"top","c":"通用","l":"普通话","g":"男","d":"率性帅气的月白（男性）","a":"audio/top_Moon.mp3","x":"官方演示样音"},{"v":"Maia","n":"四月","m":"top","c":"通用","l":"普通话","g":"女","d":"知性与温柔的碰撞（女性）","a":"audio/top_Maia.mp3","x":"官方演示样音"},{"v":"Kai","n":"凯","m":"top","c":"通用","l":"普通话","g":"","d":"耳朵的一场","a":"audio/top_Kai.mp3","x":"官方演示样音"},{"v":"Nofish","n":"不吃鱼","m":"top","c":"通用","l":"普通话","g":"男","d":"不会翘舌音的设计师（男性）","a":"audio/top_Nofish.mp3","x":"官方演示样音"},{"v":"Bella","n":"萌宝","m":"top","c":"通用","l":"普通话","g":"女","d":"喝酒不打醉拳的小萝莉（女性）","a":"audio/top_Bella.mp3","x":"官方演示样音"},{"v":"Jennifer","n":"詹妮弗","m":"top","c":"通用","l":"普通话","g":"女","d":"品牌级、电影质感般美语女声（女性）","a":"audio/top_Jennifer.mp3","x":"官方演示样音"},{"v":"Ryan","n":"甜茶","m":"top","c":"通用","l":"普通话","g":"男","d":"节奏拉满，戏感炸裂，真实与张力共舞（男性）","a":"audio/top_Ryan.mp3","x":"官方演示样音"},{"v":"Katerina","n":"卡捷琳娜","m":"top","c":"通用","l":"普通话","g":"女","d":"御姐音色，韵律回味十足（女性）","a":"audio/top_Katerina.mp3","x":"官方演示样音"},{"v":"Aiden","n":"艾登","m":"top","c":"通用","l":"普通话","g":"男","d":"精通厨艺的美语大男孩（男性）","a":"audio/top_Aiden.mp3","x":"官方演示样音"},{"v":"Eldric_Sage","n":"沧明子","m":"top","c":"通用","l":"普通话","g":"男","d":"沉稳睿智的老者，沧桑如松却心明如镜（男性）","a":"audio/top_Eldric_Sage.mp3","x":"官方演示样音"},{"v":"Mia","n":"乖小妹","m":"top","c":"通用","l":"普通话","g":"女","d":"温顺如春水，乖巧如初雪（女性）","a":"audio/top_Mia.mp3","x":"官方演示样音"},{"v":"Mochi","n":"沙小弥","m":"top","c":"通用","l":"普通话","g":"男","d":"聪明伶俐的小大人，童真未泯却早慧如禅（男性）","a":"audio/top_Mochi.mp3","x":"官方演示样音"},{"v":"Bellona","n":"燕铮莺","m":"top","c":"通用","l":"普通话","g":"女","d":"声音洪亮，吐字清晰，人物鲜活，听得人热血沸腾；金戈铁马入梦来，字正腔圆间尽显千面人声的江湖（女性）","a":"audio/top_Bellona.mp3","x":"官方演示样音"},{"v":"Vincent","n":"田叔","m":"top","c":"通用","l":"普通话","g":"男","d":"一口独特的沙哑烟嗓，一开口便道尽了千军万马与江湖豪情（男性）","a":"audio/top_Vincent.mp3","x":"官方演示样音"},{"v":"Bunny","n":"萌小姬","m":"top","c":"通用","l":"普通话","g":"女","d":"“萌属性”爆棚的小萝莉（女性）","a":"audio/top_Bunny.mp3","x":"官方演示样音"},{"v":"Neil","n":"阿闻","m":"top","c":"通用","l":"普通话","g":"男","d":"平直的基线语调，字正腔圆的咬字发音，这就是最专业的新闻主持人（男性）","a":"audio/top_Neil.mp3","x":"官方演示样音"},{"v":"Elias","n":"墨讲师","m":"top","c":"通用","l":"普通话","g":"女","d":"既保持学科严谨性，又通过叙事技巧将复杂知识转化为可消化的认知模块（女性）","a":"audio/top_Elias.mp3","x":"官方演示样音"},{"v":"Arthur","n":"徐大爷","m":"top","c":"通用","l":"普通话","g":"男","d":"被岁月和旱烟浸泡过的质朴嗓音，不疾不徐地摇开了满村的奇闻异事（男性）","a":"audio/top_Arthur.mp3","x":"官方演示样音"},{"v":"Nini","n":"邻家妹妹","m":"top","c":"通用","l":"普通话","g":"女","d":"糯米糍一样又软又黏的嗓音，那一声声拉长了的“哥哥”，甜得能把人的骨头都叫酥了（女性）","a":"audio/top_Nini.mp3","x":"官方演示样音"},{"v":"Seren","n":"小婉","m":"top","c":"通用","l":"普通话","g":"女","d":"温和舒缓的声线，助你更快地进入睡眠，晚安，好梦（女性）","a":"audio/top_Seren.mp3","x":"官方演示样音"},{"v":"Pip","n":"顽屁小孩","m":"top","c":"通用","l":"普通话","g":"男","d":"调皮捣蛋却充满童真的他来了，这是你记忆中的小新吗（男性）","a":"audio/top_Pip.mp3","x":"官方演示样音"},{"v":"Stella","n":"少女阿月","m":"top","c":"通用","l":"普通话","g":"女","d":"平时是甜到发腻的迷糊少女音，但在喊出“代表月亮消灭你”时，瞬间充满不容置疑的爱与正义（女性）","a":"audio/top_Stella.mp3","x":"官方演示样音"},{"v":"Bodega","n":"博德加","m":"top","c":"通用","l":"普通话","g":"男","d":"热情的西班牙大叔（男性）","a":"audio/top_Bodega.mp3","x":"官方演示样音"},{"v":"Sonrisa","n":"索尼莎","m":"top","c":"通用","l":"普通话","g":"女","d":"热情开朗的拉美大姐（女性）","a":"audio/top_Sonrisa.mp3","x":"官方演示样音"},{"v":"Alek","n":"阿列克","m":"top","c":"通用","l":"普通话","g":"男","d":"一开口，是战斗民族的冷，也是毛呢大衣下的暖（男性）","a":"audio/top_Alek.mp3","x":"官方演示样音"},{"v":"Dolce","n":"多尔切","m":"top","c":"通用","l":"普通话","g":"男","d":"慵懒的意大利大叔（男性）","a":"audio/top_Dolce.mp3","x":"官方演示样音"},{"v":"Sohee","n":"素熙","m":"top","c":"通用","l":"普通话","g":"女","d":"温柔开朗，情绪丰富的韩国欧尼（女性）","a":"audio/top_Sohee.mp3","x":"官方演示样音"},{"v":"Ono_Anna","n":"小野杏","m":"top","c":"通用","l":"普通话","g":"女","d":"鬼灵精怪的青梅竹马（女性）","a":"audio/top_Ono_Anna.mp3","x":"官方演示样音"},{"v":"Lenn","n":"莱恩","m":"top","c":"通用","l":"普通话","g":"男","d":"理性是底色，叛逆藏在细节里——穿西装也听后朋克的德国青年（男性）","a":"audio/top_Lenn.mp3","x":"官方演示样音"},{"v":"Emilien","n":"埃米尔安","m":"top","c":"通用","l":"普通话","g":"男","d":"浪漫的法国大哥哥（男性）","a":"audio/top_Emilien.mp3","x":"官方演示样音"},{"v":"Andre","n":"安德雷","m":"top","c":"通用","l":"普通话","g":"男","d":"声音磁性，自然舒服、沉稳男生（男性）","a":"audio/top_Andre.mp3","x":"官方演示样音"},{"v":"Radio_Gol","n":"拉迪奥·戈尔","m":"top","c":"通用","l":"普通话","g":"","d":"足球诗人","a":"audio/top_Radio_Gol.mp3","x":"官方演示样音"},{"v":"Jada","n":"上海-阿珍","m":"top","c":"方言","l":"上海话","g":"女","d":"风风火火的沪上阿姐（女性）","a":"audio/top_Jada.mp3","x":"官方演示样音"},{"v":"Dylan","n":"北京-晓东","m":"top","c":"方言","l":"北京话","g":"男","d":"北京胡同里长大的少年（男性）","a":"audio/top_Dylan.mp3","x":"官方演示样音"},{"v":"Li","n":"南京-老李","m":"top","c":"方言","l":"南京话","g":"男","d":"耐心的瑜伽老师（男性）","a":"audio/top_Li.mp3","x":"官方演示样音"},{"v":"Marcus","n":"陕西-秦川","m":"top","c":"方言","l":"陕西话","g":"男","d":"面宽话短，心实声沉——老陕的味道（男性）","a":"audio/top_Marcus.mp3","x":"官方演示样音"},{"v":"Roy","n":"闽南-阿杰","m":"top","c":"方言","l":"闽南","g":"男","d":"诙谐直爽、市井活泼的台湾哥仔形象（男性）","a":"audio/top_Roy.mp3","x":"官方演示样音"},{"v":"Peter","n":"天津-李彼得","m":"top","c":"方言","l":"天津话","g":"男","d":"天津相声，专业捧哏（男性）","a":"audio/top_Peter.mp3","x":"官方演示样音"},{"v":"Sunny","n":"四川-晴儿","m":"top","c":"方言","l":"四川话","g":"女","d":"甜到你心里的川妹子（女性）","a":"audio/top_Sunny.mp3","x":"官方演示样音"},{"v":"Eric","n":"四川-程川","m":"top","c":"方言","l":"四川话","g":"男","d":"一个跳脱市井的四川成都男子（男性）","a":"audio/top_Eric.mp3","x":"官方演示样音"},{"v":"Rocky","n":"粤语-阿强","m":"top","c":"方言","l":"粤语","g":"男","d":"幽默风趣的阿强，在线陪聊（男性）","a":"audio/top_Rocky.mp3","x":"官方演示样音"},{"v":"Kiki","n":"粤语-阿清","m":"top","c":"方言","l":"粤语","g":"女","d":"甜美的港妹闺蜜（女性）","a":"audio/top_Kiki.mp3","x":"官方演示样音"}];
+const MODELS = [
+  {id:'std', name:'标准版', tag:'已开通', ds:'当前方案在用，覆盖通用、客服、方言等常用场景', billing:'free'},
+  {id:'adv', name:'进阶版', tag:'可增配', ds:'扩展音色选择，含多款高品质与智能对话音色', billing:'paid'},
+  {id:'top', name:'旗舰版', tag:'可增配', ds:'含方言与多语种音色，适合本地化与多样化场景', billing:'paid'},
+];
+const MNAME = Object.fromEntries(MODELS.map(m=>[m.id,m.name]));
+const MTAG  = Object.fromEntries(MODELS.map(m=>[m.id,m.tag]));
+
+let curModel = 'all';
+const F = {g:'all', c:'all'};
+let kw = '';
+const key = x => x.m+'_'+x.v.replace(/[^A-Za-z0-9_]/g,'');
+
+const elGrid = document.getElementById('grid');
+const elQ = document.getElementById('q');
+
+function cnt(f){ return V.filter(f).length; }
+
+function renderModels(){
+  document.getElementById('models').innerHTML = MODELS.map(m=>{
+    const n = cnt(x=>x.m===m.id);
+    const cls = curModel===m.id ? 'on' : '';
+    const bdg = m.billing==='free' ? '不额外收费' : '需额外收费';
+    return `<div class="md ${cls}" data-m="${m.id}">
+      <div class="mt"><h3>${m.name}</h3><span class="num">${n}</span></div>
+      <div class="ds">${m.ds}</div>
+      <span class="bdg">${bdg}</span>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.md').forEach(el=>{
+    el.onclick = ()=>{ curModel = el.dataset.m; F.c='all'; renderModels(); renderTypes(); render(); };
+  });
+}
+
+function renderTypes(){
+  const order = ['通用','方言','客服','超高清','直播','童声','精品','大模型','超自然1.0','超自然2.0','数字人','多语种','英文'];
+  const base = curModel==='all' ? V : V.filter(x=>x.m===curModel);
+  const present = order.filter(t=>base.some(x=>x.c===t));
+  document.getElementById('types').innerHTML =
+    `<button class="chip on" data-k="c" data-v="all">全部<span style="opacity:.6;margin-left:4px;font-size:11px">${base.length}</span></button>` +
+    present.map(t=>`<button class="chip" data-k="c" data-v="${t}">${t}<span style="opacity:.6;margin-left:4px;font-size:11px">${base.filter(x=>x.c===t).length}</span></button>`).join('');
+  document.querySelectorAll('#types .chip').forEach(c=>{
+    c.onclick=()=>{
+      document.querySelectorAll('#types .chip').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on'); F.c=c.dataset.v; render();
+    };
+  });
+}
+
+function pass(x){
+  if(curModel!=='all' && x.m!==curModel) return false;
+  if(F.g!=='all' && x.g!==F.g) return false;
+  if(F.c!=='all' && x.c!==F.c) return false;
+  if(kw){
+    const s=(x.n+' '+x.v+' '+x.d+' '+x.l+' '+x.c+' '+MNAME[x.m]).toLowerCase();
+    if(!s.includes(kw.toLowerCase())) return false;
+  }
+  return true;
+}
+
+function tagHtml(x){
+  let h = `<span class="tg">${MNAME[x.m]}</span>`;
+  if(x.c) h += `<span class="tg">${x.c}</span>`;
+  if(x.l && x.l!=='普通话' && x.l!=='中文') h += `<span class="tg d">${x.l}</span>`;
+  if(x.g) h += `<span class="tg ${x.g==='女'?'f':'m'}">${x.g}声</span>`;
+  return h;
+}
+
+function render(){
+  const list = V.filter(pass);
+  if(!list.length){ elGrid.innerHTML='<div class="empty">没有符合条件的结果（共 '+V.length+' 款音色）</div>'; return; }
+  elGrid.innerHTML = list.map(x=>{
+    const k=key(x);
+    const real = x.x && x.x.indexOf('官方演示样音')===-1;
+    const tc = real ? x.x : `<span class="mut">${x.x}</span>`;
+    return `<div class="card" data-key="${k}">
+      <div class="hd">
+        <div><div class="nm">${x.n}</div><div class="vc">${x.v}</div></div>
+        <div class="tags">${tagHtml(x)}</div>
+      </div>
+      <div class="ds">${x.d || ''}</div>
+      <button class="pb" data-k="${k}"><span class="tr"></span><span class="tx">试听</span></button>
+      <audio id="au-${k}" src="${x.a}" preload="none" controls controlslist="nodownload"></audio>
+      <div class="tbox">
+        <div class="th"><span>音频文本</span>${real?`<button class="cp" data-k="${k}">复制</button>`:`<button class="cp" disabled>—</button>`}</div>
+        <div class="tc">${tc}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  elGrid.querySelectorAll('.pb').forEach(b=>{
+    b.onclick=()=>{ const au=document.getElementById('au-'+b.dataset.k); au.paused?au.play():au.pause(); };
+  });
+  elGrid.querySelectorAll('.cp:not([disabled])').forEach(c=>{
+    c.onclick=()=>{
+      const x=V.find(y=>key(y)===c.dataset.k); if(!x) return;
+      navigator.clipboard.writeText(x.x).then(()=>{
+        const o=c.textContent; c.textContent='已复制'; setTimeout(()=>c.textContent=o,1200);
+      }).catch(()=>{});
+    };
+  });
+  elGrid.querySelectorAll('audio').forEach(au=>{
+    const k=au.id.slice(3);
+    const card=elGrid.querySelector(`[data-key="${k}"]`);
+    const b=card.querySelector('.pb');
+    au.addEventListener('play',()=>{
+      document.querySelectorAll('audio').forEach(o=>{ if(o!==au) o.pause(); });
+      document.querySelectorAll('.card').forEach(c=>c.classList.remove('on'));
+      document.querySelectorAll('.pb').forEach(p=>{ p.classList.remove('on'); p.querySelector('.tx').textContent='试听'; p.querySelector('.tr').className='tr'; });
+      card.classList.add('on'); b.classList.add('on');
+      b.querySelector('.tx').textContent='播放中'; b.querySelector('.tr').className='tr sq';
+    });
+    const rst=()=>{ card.classList.remove('on'); b.classList.remove('on'); b.querySelector('.tx').textContent='试听'; b.querySelector('.tr').className='tr'; };
+    au.addEventListener('pause',rst); au.addEventListener('ended',rst);
+  });
+}
+
+document.querySelectorAll('.chip[data-k="g"]').forEach(c=>{
+  c.onclick=()=>{
+    document.querySelectorAll('.chip[data-k="g"]').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on'); F.g=c.dataset.v; render();
+  };
+});
+elQ.oninput=e=>{ kw=e.target.value.trim(); render(); };
+document.getElementById('reset').onclick=()=>{
+  curModel='all'; F.g='all'; F.c='all'; kw=''; elQ.value='';
+  document.querySelectorAll('.chip[data-k="g"]').forEach(x=>x.classList.toggle('on',x.dataset.v==='all'));
+  renderModels(); renderTypes(); render();
+};
+
+document.getElementById('m-total').textContent = V.length;
+document.querySelectorAll('.ftotal').forEach(e=>e.textContent=V.length);
+renderModels(); renderTypes(); render();
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# 密钥与环境文件（绝对不可提交）
+*.env
+SecretId*
+SecretKey*
+backup.env
+.env*
+.env.*
+
+# 合成脚本与中间产物（发布不需要）
+*.py
+audio_mp3/
+tc_results.json
+
+# 注意：audio/ 目录发布需要，不要加到这里
+# 如需忽略源 WAV，可用：audio/*.wav
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -39,6 +39,9 @@ git branch -M main
 git push -u origin main
 ```
 
+> **GitHub 已不支持密码认证**。推送时若提示输入密码，需使用 **Personal Access Token**：
+> GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token，勾选 `repo` 权限，生成后把 Token 当作密码粘贴。
+
 仓库 → **Settings → Pages**：
 - Source：`Deploy from a branch`
 - Branch：`main` / `/ (root)`
@@ -58,7 +61,7 @@ git push -u origin main
 1. 页面内不含任何上游供应商名称（已做全量脱敏检查）
 2. `index.html` 与 `assets/` 不含密钥（合成脚本与密钥均在本机独立目录，不纳入本仓库）
 3. 音频为演示样音；对外演示前建议用实际业务话术再合成一版
-4. 商务联系方式：`index.html` 中 `mailto:sales@example.com` 需替换为真实邮箱
+4. 商务联系邮箱已配置为 `ganyuning@egosai.com`
 
 ## 六、重新生成音频（内部操作）
 
